@@ -1,0 +1,7 @@
+*.jpg
+*.png
+*.pth
+*.txt
+*.pyc
+/datasets
+*.csv
