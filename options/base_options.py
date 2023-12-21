@@ -11,16 +11,10 @@ class BaseOptions():
         self.initialized = False
 
     def initialize(self, parser):
-        # Added by me
-        # parser.add_argument('--real_path', type=str, default=None, help='dir name or a pickle')
-        # parser.add_argument('--fake_path', type=str, default=None, help='dir name or a pickle')
-        # parser.add_argument('--data_mode', type=str, default=None, help='wang2020 or ours')
-        # parser.add_argument('--max_sample', type=int, default=1000, help='only check this number of images for both fake/real')
-
         parser.add_argument('--mode', default='binary')
         parser.add_argument('--arch', type=str, default='res50', help='architecture for binary classification')
 
-        # data augmentation
+        # Data augmentation
         parser.add_argument('--rz_interp', default='bilinear')
         parser.add_argument('--blur_prob', type=float, default=0)
         parser.add_argument('--blur_sig', default='0.5')
@@ -45,6 +39,16 @@ class BaseOptions():
         parser.add_argument('--init_type', type=str, default='normal', help='network initialization [normal|xavier|kaiming|orthogonal]')
         parser.add_argument('--init_gain', type=float, default=0.02, help='scaling factor for normal, xavier and orthogonal.')
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{loadSize}')
+
+        # Frequency domain (mine)
+        parser.add_argument('--fft', action='store_true', help='Apply FFT transformation')
+        parser.add_argument('--dct', action='store_true', help='Apply DCT transformation')
+        parser.add_argument('--high_pass', action='store_true', help='Apply High Pass Filter')
+        parser.add_argument('--low_pass', action='store_true', help='Apply Low Pass Filter')
+        parser.add_argument('--edge_detection', action='store_true', help='Apply Edge Detection')
+        # ... other arguments ...
+
+
         self.initialized = True
         return parser
 

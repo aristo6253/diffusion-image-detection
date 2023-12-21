@@ -32,6 +32,13 @@ def get_val_opt():
 
     return val_opt
 
+def format_duration(seconds):
+    """Converts time in seconds to a formatted string of hours, minutes, and seconds."""
+    hours, remainder = divmod(seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return "{:02d}:{:02d}:{:02d}".format(int(hours), int(minutes), int(seconds))
+
+
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()
@@ -48,8 +55,15 @@ if __name__ == '__main__':
 
     model = Trainer(opt)
     early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.001, verbose=True)
+    # Loop over the specified number of iterations (epochs)
+
+    # Start time for the total training process
+    total_start_time = time.time()
+
     for epoch in range(opt.niter):
-        epoch_start_time = time.time()
+        epoch_start_time = time.time()  # Record the start time of the epoch
+        print("Epoch {} started at {}".format(epoch, time.strftime("%H:%M:%S", time.localtime(epoch_start_time))))
+
         iter_data_time = time.time()
         epoch_iter = 0
 
@@ -62,37 +76,44 @@ if __name__ == '__main__':
 
             if model.total_steps % opt.loss_freq == 0:
                 print("Train loss: {} at step: {}".format(model.loss, model.total_steps))
-                # train_writer.add_scalar('loss', model.loss, model.total_steps)
 
             if model.total_steps % opt.save_latest_freq == 0:
-                print('saving the latest model %s (epoch %d, model.total_steps %d)' %
-                      (opt.name, epoch, model.total_steps))
+                print('Saving the latest model "{}" (epoch {}, total_steps {})'.format(
+                    opt.name, epoch, model.total_steps))
                 model.save_networks('latest')
 
-            # print("Iter time: %d sec" % (time.time()-iter_data_time))
-            # iter_data_time = time.time()
-
         if epoch % opt.save_epoch_freq == 0:
-            print('saving the model at the end of epoch %d, iters %d' %
-                  (epoch, model.total_steps))
+            print('Saving the model at the end of epoch {}, total iterations {}'.format(
+                epoch, model.total_steps))
             model.save_networks('latest')
             model.save_networks(epoch)
 
-        # Validation
         model.eval()
         acc, ap = validate(model.model, val_opt)[:2]
-        # val_writer.add_scalar('accuracy', acc, model.total_steps)
-        # val_writer.add_scalar('ap', ap, model.total_steps)
-        print("(Val @ epoch {}) acc: {}; ap: {}".format(epoch, acc, ap))
+        print("(Validation @ epoch {}) Accuracy: {}; Average Precision: {}".format(epoch, acc, ap))
 
         early_stopping(acc, model)
         if early_stopping.early_stop:
             cont_train = model.adjust_learning_rate()
             if cont_train:
-                print("Learning rate dropped by 10, continue training...")
+                print("Learning rate reduced. Continuing training...")
                 early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.002, verbose=True)
             else:
-                print("Early stopping.")
+                print("Early stopping triggered. Exiting training loop.")
                 break
+
         model.train()
+
+        epoch_end_time = time.time()
+        epoch_duration = epoch_end_time - epoch_start_time
+        running_time = epoch_end_time - total_start_time
+        print("Epoch {} ended. Duration: {} Running time so far: {}".format(
+            epoch, format_duration(epoch_duration), format_duration(running_time)))
+
+    # Print total running time
+    total_end_time = time.time()
+    total_duration = total_end_time - total_start_time
+    print("Total running time: {}".format(format_duration(total_duration)))
+
+    # End of training loop
 

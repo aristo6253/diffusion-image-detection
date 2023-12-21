@@ -17,13 +17,13 @@ def count_files(directory):
     return sum([len(files) for _, _, files in os.walk(directory)])
 
 # Define sets
-train_val_set = ['ProGAN']
+train_val_set = ['ProGAN', 'PNDM_200']
 test_set = ['DDIM_200', 'PNDM_200', 'ProGAN']
 real_set = 'CelebA-HQ-img'
 
 # Define source and destination directories
-source_dir = '/home/aristotelis/diffusion-image-detection/my_data_hp_fft'
-dest_dir = '/home/aristotelis/diffusion-image-detection/data_restruct_ProGAN_hp_fft'
+source_dir = '../data/'
+dest_dir = './data_restruct_ProGAN'
 
 # Create base directories and initialize counters
 print("Creating base directories...")
