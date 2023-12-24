@@ -15,8 +15,8 @@ mkdir(results_dir)
 
 dataroot = './data_restruct_ProGAN_PNDM/test'
 # dataroot = './data_restruct_PNDM_DDIM/test'
-vals = ['DDIM_200', 'PNDM_200', 'ProGAN']
-multiclass = [0, 0, 0]
+vals = ['PNDM_200', 'DDIM_200', 'DDPM_200', 'LDM_200', 'ProGAN']
+multiclass = [0, 0, 0, 0, 0]
 
 # model
-model_path = 'weights/progan_pndm/fft.pth'
+model_path = 'weights/progan_pndm/fft_lp.pth'

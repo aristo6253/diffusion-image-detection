@@ -18,7 +18,7 @@ def count_files(directory):
 
 # Define sets
 train_val_set = ['ProGAN', 'PNDM_200']
-test_set = ['DDIM_200', 'PNDM_200', 'ProGAN']
+test_set = ['PNDM_200', 'DDIM_200', 'DDPM_200', 'LDM_200', 'ProGAN']
 real_set = 'CelebA-HQ-img'
 
 # Define source and destination directories

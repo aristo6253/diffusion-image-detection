@@ -44,8 +44,11 @@ class BaseOptions():
         parser.add_argument('--fft', action='store_true', help='Apply FFT transformation')
         parser.add_argument('--dct', action='store_true', help='Apply DCT transformation')
         parser.add_argument('--high_pass', action='store_true', help='Apply High Pass Filter')
+        parser.add_argument('--thresh', type=int, default=-1, help='Apply threshold to the high-pass (give value, if negative won\'t be applied)')
         parser.add_argument('--low_pass', action='store_true', help='Apply Low Pass Filter')
-        parser.add_argument('--edge_detection', action='store_true', help='Apply Edge Detection')
+        parser.add_argument('--edge', action='store_true', help='Apply Edge Detection')
+        parser.add_argument('--sharp_edge', action='store_true', help='Apply Edge Detection')
+
         # ... other arguments ...
 
 

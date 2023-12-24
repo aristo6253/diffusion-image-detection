@@ -43,8 +43,9 @@ def binary_dataset(opt, root):
             root,
             transforms.Compose([
                 rz_func,
-                transforms.Lambda(lambda img: frequency_domain(img, opt)),
+                # transforms.Lambda(lambda img: frequency_domain(img, opt)),
                 transforms.Lambda(lambda img: data_augment(img, opt)),
+                transforms.Lambda(lambda img: frequency_domain(img, opt)),
                 crop_func,
                 flip_func,
                 transforms.ToTensor(),
@@ -155,16 +156,23 @@ def frequency_domain(img, opt):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         return f"{prefix}_{timestamp}.png"
 
+    # Image.fromarray(img_np).save(generate_filename("basic"))
+
     # Apply transformations based on options
     if opt.high_pass:
-        img_np = apply_high_pass(img_np)
+        img_np = apply_high_pass(img_np, opt.thresh)
         # Image.fromarray(img_np).save(generate_filename("high_pass"))
     if opt.low_pass:
         img_np = apply_low_pass(img_np)
         # Image.fromarray(img_np).save(generate_filename("low_pass"))
-    if opt.edge_detection:
+    if opt.edge:
         img_np = apply_edge_detection(img_np)
         # Image.fromarray(img_np).save(generate_filename("edge_detection"))
+    if opt.sharp_edge:
+        img_np = apply_edge_detection(img_np)
+        # Image.fromarray(img_np).save(generate_filename("sharp_edge"))
+
+
 
     # Apply frequency transformations
     if opt.fft:
@@ -180,7 +188,7 @@ def frequency_domain(img, opt):
 
     return final_image
 
-def apply_high_pass(img): # Maybe threshold the high pass
+def apply_high_pass(img, threshold): # Maybe threshold the high pass
     """
     Apply high-pass filtering to an image.
 
@@ -194,7 +202,16 @@ def apply_high_pass(img): # Maybe threshold the high pass
     median_blurred = cv2.medianBlur(img, 5)
 
     # Perform high pass filtering
-    return cv2.subtract(img, median_blurred)
+    hp_img = cv2.subtract(img, median_blurred)
+
+    if threshold > 0:
+        # Thresholded approach
+        _, thresh_img = cv2.threshold(hp_img, threshold, 255, cv2.THRESH_BINARY)
+        # non_zero_positions = (binary_image > 0).astype(int)
+    else:
+        thresh_img = hp_img
+
+    return thresh_img
 
 def apply_low_pass(img):
     """
@@ -211,21 +228,39 @@ def apply_low_pass(img):
 
 def apply_edge_detection(img):
     """
-    Apply Canny edge detection to an image.
+    Apply edge detection to an image.
 
     Args:
     img (numpy.ndarray): The input image.
 
     Returns:
-    numpy.ndarray: The image with edge detection applied.
+    numpy.ndarray: The edge-detected image.
     """
-    # Convert to grayscale for edge detection
+    # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # Apply Canny edge detection
+    # Apply edge detection (e.g., using Canny)
     edges = cv2.Canny(gray, 100, 200)
 
-    return edges
+    # Replicate the edges across three channels if needed
+    edges_3channel = cv2.merge([edges, edges, edges])
+
+    return edges_3channel
+
+def apply_sharp_edge_detection(image):
+    """
+    Apply sharpening to an image using a kernel that enhances edges.
+    """
+
+    # Create a sharpening kernel, other kernels can be used for different effects
+    kernel = np.array([[0, -1, 0],
+                       [-1, 5,-1],
+                       [0, -1, 0]])
+    sharpened_image = cv2.filter2D(image, -1, kernel)
+
+    
+    return apply_edge_detection(sharpen_image)
+
 
 def apply_fft(img):
     """
@@ -279,7 +314,7 @@ def fft_on_channel(channel):
 
 def apply_dct(img):
     """
-    Apply Discrete Cosine Transform to an image.
+    Apply Discrete Cosine Transform to an image's three channels.
 
     Args:
     img (numpy.ndarray): The input image.
@@ -287,9 +322,31 @@ def apply_dct(img):
     Returns:
     numpy.ndarray: The DCT transformed image.
     """
-    # Convert image to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Split the image into its Red, Green, and Blue channels
+    red_channel, green_channel, blue_channel = cv2.split(img)
 
-    # Apply DCT
-    dct_transformed = cv2.dct(np.float32(gray)/255.0) * 255.0
-    return np.uint8(dct_transformed)
+    # Apply DCT to each channel
+    red_dct = dct_on_channel(red_channel)
+    green_dct = dct_on_channel(green_channel)
+    blue_dct = dct_on_channel(blue_channel)
+
+    # Merge the channels back
+    img_dct = cv2.merge([red_dct, green_dct, blue_dct])
+    return img_dct
+
+def dct_on_channel(channel):
+    """
+    Apply DCT on a single channel of an image.
+
+    Args:
+    channel (numpy.ndarray): Single channel of an image.
+
+    Returns:
+    numpy.ndarray: DCT transformed channel.
+    """
+    # Perform DCT on channel
+    dct_transformed = cv2.dct(np.float32(channel)/255.0) * 255.0
+
+    # Normalize and cast to uint8
+    dct_normalized = cv2.normalize(dct_transformed, None, 0, 255, cv2.NORM_MINMAX)
+    return np.uint8(dct_normalized)

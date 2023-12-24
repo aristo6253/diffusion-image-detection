@@ -9,7 +9,9 @@ datasets = {
     'celeb': 'CelebA-HQ-img',
     'ddim': 'DDIM_200',
     'pndm': 'PNDM_200',
-    'progan': 'ProGAN'
+    'progan': 'ProGAN',
+    'ddpm': 'DDPM_200',
+    'ldm': 'LDM_200',
 }
 
 def apply_high_pass(image):
@@ -77,7 +79,7 @@ def main(dataset, threshold, no_thresh):
     plt.imshow(heatmap, cmap='hot', interpolation='nearest')
     plt.title(no_thresh*'Non-'+'Thresholded Heatmap of Non-Zero Pixel Frequency')
     plt.colorbar()
-    plt.savefig(f'highpass_heatmaps_total/heatmap{suffix}.png')
+    plt.savefig(f'highpass_heatmaps/heatmap{suffix}.png')
     plt.show()
 
 
@@ -86,7 +88,7 @@ if __name__ == '__main__':
 
     # Add arguments
     parser.add_argument('--thresh_val', type=int, default=1, help='Threshold used for binarization')
-    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'pndm', 'progan'], help='Dataset to be processed')
+    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'pndm', 'ddpm', 'ldm', 'progan'], help='Dataset to be processed')
     parser.add_argument('--no_thresh', action='store_true', help='Opt to not use a threshold')
 
     # Parse the arguments
