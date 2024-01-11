@@ -9,7 +9,10 @@ datasets = {
     'celeb': 'CelebA-HQ-img',
     'ddim': 'DDIM_200',
     'pndm': 'PNDM_200',
-    'progan': 'ProGAN'
+    'progan': 'ProGAN',
+    'ddpm': 'DDPM_200',
+    'ldm': 'LDM_200',
+    'stylegan': 'StyleGAN2_tmp',
 }
 
 def apply_edge_detection(image_gray):
@@ -71,7 +74,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Process images and generate a heatmap using edge detection.")
 
     # Add arguments
-    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'pndm', 'progan'], help='Dataset to be processed')
+    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'pndm', 'ddpm', 'ldm', 'progan', 'stylegan'], help='Dataset to be processed')
 
     # Parse the arguments
     args = parser.parse_args()

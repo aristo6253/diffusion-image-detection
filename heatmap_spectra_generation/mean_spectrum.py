@@ -12,7 +12,8 @@ datasets = {
     'pndm': 'PNDM_200',
     'progan': 'ProGAN',
     'ddpm': 'DDPM_200',
-    'ldm': 'LDM_200'
+    'ldm': 'LDM_200',
+    'stylegan': 'StyleGAN2_tmp',
 }
 
 def apply_high_pass_filter(image):
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Process images with different filters and generate a mean spectrum using FFT or DCT.")
 
     # Add arguments
-    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'ddpm', 'ldm', 'pndm', 'progan'], help='Dataset to be processed')
+    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'ddpm', 'ldm', 'pndm', 'progan', 'stylegan'], help='Dataset to be processed')
     parser.add_argument('--filter', type=str, choices=['high_pass', 'low_pass', 'edge_detection', 'sharp_edge_detection'], help='Type of filter to apply')
     parser.add_argument('--transform', type=str, choices=['fft', 'dct'], help='Type of transform to apply: fft or dct')
 

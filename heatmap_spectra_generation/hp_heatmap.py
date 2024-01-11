@@ -12,6 +12,7 @@ datasets = {
     'progan': 'ProGAN',
     'ddpm': 'DDPM_200',
     'ldm': 'LDM_200',
+    'stylegan': 'StyleGAN2_tmp',
 }
 
 def apply_high_pass(image):
@@ -88,7 +89,7 @@ if __name__ == '__main__':
 
     # Add arguments
     parser.add_argument('--thresh_val', type=int, default=1, help='Threshold used for binarization')
-    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'pndm', 'ddpm', 'ldm', 'progan'], help='Dataset to be processed')
+    parser.add_argument('--dataset', type=str, choices=['celeb', 'ddim', 'pndm', 'ddpm', 'ldm', 'progan', 'stylegan'], help='Dataset to be processed')
     parser.add_argument('--no_thresh', action='store_true', help='Opt to not use a threshold')
 
     # Parse the arguments
