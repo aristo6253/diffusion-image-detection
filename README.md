@@ -4,7 +4,7 @@ Student: Aristotelis Dimitriou
 <br>Professor: Touradj Ebrahimi
 
 ---
-This repository contains models, evaluation code, training and visualization code from this [report]() and [presentation](). The model architecture is based on the [Wang et al.](https://arxiv.org/pdf/1912.11035.pdf) paper and its code can be found in this [github](https://github.com/peterwang512/CNNDetection).
+This repository contains models, evaluation code, training and visualization code from this [report](https://github.com/aristo6253/diffusion-image-detection/blob/main/report.pdf) and [presentation](https://github.com/aristo6253/diffusion-image-detection/blob/main/presentation.pdf). The model architecture is based on the [Wang et al.](https://arxiv.org/pdf/1912.11035.pdf) paper and its code can be found in this [github](https://github.com/peterwang512/CNNDetection).
 
 ### Datasets
 In order to train/test using the code of this repository the architecture of the datasets have to be the following:
