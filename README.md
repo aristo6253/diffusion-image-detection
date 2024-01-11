@@ -107,7 +107,7 @@ bash weights/download_weights.sh
 
 The frequency heatmaps and spectra that can be found in the report and the presentation can be obtained by running the scripts in the `heatmap_spectra_generation` folder. To be able to run this with your own datasets, you will need to add your dataset in the `datasets` dictionary and also inlude it in the argument parser in the possible choices of datasets.
 
-To create a frequency heatmap only required argument is the dataset to be analyzed (for the high-pass script there is the possibility to use a threshold or not, the default option is a threshold of 1).
+To create a frequency heatmap the only required argument is the dataset to be analyzed (for the high-pass script there is the possibility to use a threshold or not, the default option is a threshold of 1).
 
 ```
 python heatmap_spectra_generation/hp_heatmap.py --dataset progan --no_thresh
