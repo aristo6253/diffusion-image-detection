@@ -83,7 +83,7 @@ The model resulting from the training will be stored in the `/checkpoints` folde
 
 ### Evaluation 
 
-To evaluate a model the file named `eval_config.py` has to be modified. The `dataroot` variable should contain the path to the test folder, the `vals` variable should be a list containing the names of the datasets to be evaluated (subdirectories of test) and the `model_path` variable should contain the path to the weights of the model that has to be evaluated (`*.pth` file).
+To evaluate a model, the file named `eval_config.py` has to be modified. The `dataroot` variable should contain the path to the test folder, the `vals` variable should be a list containing the names of the datasets to be evaluated (subdirectories of test) and the `model_path` variable should contain the path to the weights of the model that has to be evaluated (`*.pth` file).
 
 When these are configured, we can start the evaluation. We can run the command below:
 ```
