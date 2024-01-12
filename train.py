@@ -50,9 +50,6 @@ if __name__ == '__main__':
     dataset_size = len(data_loader)
     print('#training images = %d' % dataset_size)
 
-    # train_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "train"))
-    # val_writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name, "val"))
-
     model = Trainer(opt)
     early_stopping = EarlyStopping(patience=opt.earlystop_epoch, delta=-0.001, verbose=True)
     # Loop over the specified number of iterations (epochs)
