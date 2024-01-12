@@ -3,5 +3,5 @@
 *.pth
 *.txt
 *.pyc
-/datasets
+
 *.csv
